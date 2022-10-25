@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="./dist/main.css" />
+
+  <!-- FONTS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=Russo+One&display=swap"
+    rel="stylesheet" />
+
+  <!-- Alpine Plugins -->
+  <script defer src="https://unpkg.com/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
+
+  <!-- <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script> -->
+  <script defer src="https://unpkg.com/alpinejs@3.10.3/dist/cdn.min.js"></script>
+
+  <title>News - BASE Magazine</title>
+</head>
+
+<body>
+  <!-- HEADER SECTION START -->
+  <header class="fixed w-full h-[90px] ease-[cubic-bezier(.4,0,.2,1)] duration-300 transition-colors" :class="{
+      'z-40' : searchModalOpen || sidebarOpen,
+      'z-20' : !searchModalOpen && !sidebarOpen,
+      'bg-black/50 lg:bg-transparent' : headerScroll
+    }" x-data="{
+      sidebarOpen: false,
+      searchModalOpen: false,
+      headerScroll: false,
+      bodyOverflow: function (modal) {
+        document.querySelector('body').classList.remove('overflow-hidden', 'overflow-visible');
+        document.querySelector('body').classList.add(modal ? 'overflow-hidden' : 'overflow-visible');
+      },
+    }" @scroll.window="
+      if (window.pageYOffset > 10) {
+        headerScroll = true;
+      }else{
+        headerScroll = false;
+      }
+    ">
+    <div class="pr-[110px] pl-5 h-[90px] flex flex-row items-center w-full relative z-40">
+      <!-- LOGO -->
+      <a href="#"
+        class="duration-300 h-10 w-[126px] transition-opacity ease-[cubic-bezier(.4,0,.2,1)] hover:opacity-75">
+        <img src="images/mobWOW-Base-Logo-Red (2).svg" alt="Logo" class="max-w-full h-auto" />
+      </a>
+      <!-- DESKTOP SEARCH & CTA -->
+      <div class="hidden sm:flex items-center justify-self-end ml-auto">
+        <!-- SEARCH BTN -->
+        <a href="#" @click.prevent="searchModalOpen = true; bodyOverflow(searchModalOpen); sidebarOpen = false"
+          class="hidden xl:flex mr-6 duration-300 ease-[cubic-bezier(.4,0,.2,1)] transition-opacity hover:opacity-75 text-white">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+            stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+          </svg>
+        </a>
+        <!-- HEADER CTA -->
+        <a href="#"
+          class="px-3 py-2 md:py-3 whitespace-nowrap rounded-md ease-[cubic-bezier(.4,0,.2,1)] transition-all uppercase text-[15px] bg-[#f79400] text-white inline-flex items-center font-['Jost',_sans-serif] tracking-wider hover:bg-[#cb7900]">
+          Get your free magazine
+          <span class="ml-1">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+              <path fill-rule="evenodd"
+                d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                clip-rule="evenodd" />
+            </svg>
+          </span>
+        </a>
+      </div>
+    </div>
+    <!-- HAMBURGER ICON -->
+    <button type="button" @click="sidebarOpen = !sidebarOpen"
+      class="fixed top-0 right-0 h-[90px] w-[90px] flex justify-items-center items-center hover:bg-[#f79400] transition-colors duration-300 focus:outline-none z-40"
+      :class="[sidebarOpen ? 'bg-[#f79400]' : 'bg-[#111111]']">
+      <div class="w-[40px] mx-auto transition-all duration-300" :class="{'opacity-0' : sidebarOpen}">
+        <span class="block h-0.5 bg-white mb-[7px] transition-all ease-[cubic-bezier(.4,0,.2,1)]"></span>
+        <span class="block h-0.5 bg-white mb-[7px] transition-all ease-[cubic-bezier(.4,0,.2,1)]"></span>
+        <span class="block h-0.5 w-[26px] bg-white transition-all ease-[cubic-bezier(.4,0,.2,1)]"></span>
+      </div>
+      <div class="absolute inset-0 p-8 transition-all duration-300" :class="{'opacity-0' : !sidebarOpen}">
+        <img src="images/close-white.svg" alt="Close Icon" />
+      </div>
+    </button>
+    <!-- SEARCH MODAL -->
+    <template x-if="true">
+      <div class="fixed inset-0 h-full w-full bg-[url('../images/textured-bg.jpg')] bg-repeat z-40"
+        x-show="searchModalOpen" x-transition:enter="transition ease-[cubic-bezier(.4,0,.2,1)] duration-500"
+        x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+        x-transition:leave="transition ease-[cubic-bezier(.4,0,.2,1)] duration-500"
+        x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
+        <!-- CLOSE BUTTON -->
+        <button type="button" class="w-9 h-7 fixed top-5 right-5"
+          @click="searchModalOpen = false; bodyOverflow(searchModalOpen)">
+          <img src="images/close.svg" alt="Close Search Button" class="max-w-full h-auto" />
+        </button>
+        <!-- SEARCH MODAL CONTENT -->
+        <div class="container mx-auto px-4 flex h-full items-center">
+          <div class="flex-col md:w-6/12 mx-auto">
+            <!-- SEARCH HEADING -->
+            <h5
+              class="text-center font-['Russo_One',_sans-serif] uppercase tracking-wide text-[#111111] text-[22px] lg:text-[32px] mb-5">
+              Start your adventure here
+            </h5>
+            <!-- SEARCH BAR -->
+            <form class="w-full relative">
+              <!-- SEARCH INPUT -->
+              <input type="search"
+                class="w-full appearance-none bg-white border outline-none border-[#d3d3d3] focus:border-[#f79400] focus:ring-0 p-3 text-[19px] leading-[24px] rounded-lg font-['Jost',_sans-serif]"
+                placeholder="Search …" value="" name="s" />
+              <!-- SEARCH SUBMIT BUTTON -->
+              <button type="button"
+                class="absolute right-0 top-0 bottom-0 bg-[#f79400] w-14 rounded-r-md transition-colors hover:bg-[#cb7900] text-white flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                  stroke="currentColor" class="w-6 h-6">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                </svg>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </template>
+    <!-- SIDEBAR -->
+    <template x-if="true">
+      <div class="fixed inset-0 z-30 h-full w-full bg-[url('../images/textured-bg-grey.jpg')] bg-repeat"
+        x-show="sidebarOpen; bodyOverflow(sidebarOpen)"
+        x-transition:enter="transition ease-[cubic-bezier(.86,.01,.77,.78)] duration-700"
+        x-transition:enter-start="translate-x-full" x-transition:enter-end="translate-x-0"
+        x-transition:leave="transition ease-[cubic-bezier(.86,.01,.77,.78)] duration-700"
+        x-transition:leave-start="translate-x-0" x-transition:leave-end="translate-x-full" x-data="{
+        menuItems: [
+          { title: 'Subscribe now', url: '#'},
+          { title: 'News', url: '#'},
+          { title: 'Features', url: '#'},
+          { title: 'Videos', url: '#'},
+          { title: 'Gear', url: '#'},
+          { title: 'The collective', url: '#'},
+          { title: 'magazine', url: '#'},
+          { title: 'Contribute', url: '#'},
+          { title: 'Join Us', url: '#'},
+          { title: 'Get in touch', url: '#'},
+          { title: 'The base story', url: '#'},
+          { title: 'For advertisers & partners', url: '#'},
+          { title: 'My Account', url: '#'},
+        ]
+      }">
+        <!-- SIDEBAR CONTAINER -->
+        <div class="container px-4 mx-auto h-full">
+          <div class="block h-[95%] pt-32 items-center lg:w-6/12 overflow-y-auto">
+            <ul
+              class="flex flex-col w-full text-[27px] md:text-[35px] tracking-wide uppercase h-full overflow-y-scroll text-white font-['Russo_One',_sans-serif]">
+              <template x-for="item in menuItems" :key="item.title">
+                <li class="mb-0.5 w-full">
+                  <a :href="item.url" class="hover:text-[#f79400] transition-all w-full block" x-text="item.title"></a>
+                </li>
+              </template>
+            </ul>
+          </div>
+        </div>
+        <!-- SIDEBAR DESKTOP SIDE IMAGE -->
+        <div class="hidden lg:block h-screen w-6/12 absolute inset-y-0 right-0 menu-mask">
+          <div class="w-full h-full">
+            <img src="images/sidebar-img.png" alt="" class="w-full h-full object-cover object-top" />
+          </div>
+        </div>
+      </div>
+    </template>
+  </header>
+  <!-- HEADER SECTION END -->
+  <!-- HERO SECTION START -->
+  <section class="relative" x-data="{
+    init(){
+      this.sliderIntervel();
+      document.addEventListener('alpine:initialized', () => {
+        setTimeout(() => {
+          this.heroLoaded = true;
+        }, 1000);
+      })
+      },
+      heroLoaded: false,
+      sliderTimer: '',
+      touchstartX: 0,
+      touchstartY: 0,
+      touchendX: 0,
+      touchendY: 0,
+      handleGesture: function(){
+        if (this.touchendX + 21 < this.touchstartX) { 
+          if(this.selected >= this.heroData.length) this.selected = 0;
+          this.selected++;
+        } 
+        if(this.touchendX > this.touchstartX + 21) {
+          if(this.selected <= 1) this.selected = this.heroData.length + 1;
+          this.selected--;
+        }
+      },
+      sliderIntervel: function(){
+        this.sliderTimer = setInterval(() => {
+          if(this.selected >= this.heroData.length) this.selected = 0;
+          this.selected++;
+        }, 7000);
+      },
+      selected: 1,
+      heroData: [
+      {
+        title: 'Free Rein: An Introduction to Pony Trekking',
+          caption: 'Walking the length of the Scottish Highlands with a fell pony',
+          featureType: 'Story',
+          author: 'Eliza Brown',
+          authorLink: '#',
+          readMore: '#',
+          imageSrc: 'images/hero-img-1.jpg'
+        },
+        {
+          title: 'Bikepacking The Arctic Post Road',
+          caption: 'Adventure in the Far North from Lapland to the Arctic Ocean',
+          featureType: 'Story',
+          author: 'Heena Palosaari',
+          authorLink: '#',
+          readMore: '#',
+          imageSrc: 'images/hero-img-2.jpg',
+        },
+        {
+          title: 'A Catalyst For Change: The Neil Gresham Interview',
+          caption: 'We catch up with one of the UK’s most historically significant and influential climbers',
+          featureType: 'Interview',
+          author: 'Marc Langley',
+          authorLink: '#',
+          readMore: '#',
+          imageSrc: 'images/hero-img-3.jpg',
+        },
+      ]
+    }">
+    <!-- HERO CONTAINER -->
+    <template x-if="true">
+      <div class="h-screen">
+        <!-- HERO SECTION -->
+        <div class="h-full" @mousedown.passive="
+        touchstartY = $event.screenY;
+        touchstartX = $event.screenX;
+        " @touchstart.passive="
+        touchstartX = $event.changedTouches[0].screenX;
+        touchstartY = $event.changedTouches[0].screenY;
+        " @mouseup.passive="
+        touchendX = $event.screenX;
+        touchendY = $event.screenY;
+        clearInterval(sliderTimer);
+        sliderIntervel();
+        handleGesture();
+        " @touchend.passive="
+        touchendX = $event.changedTouches[0].screenX;
+        touchendY = $event.changedTouches[0].screenY;
+        clearInterval(sliderTimer);
+        sliderIntervel();
+        handleGesture();
+        ">
+          <!-- HERO IMAGE -->
+          <template x-for="(hero, index) in heroData" :key="index">
+            <img :src="hero.imageSrc" alt=""
+              :class="selected === (index + 1) ? 'opacity-100 visible' : 'opacity-0 invisible'"
+              class="absolute inset-0 object-cover object-center w-full h-full -z-10 transition-all duration-[900ms]" />
+          </template>
+          <!-- HERO OVERLAY -->
+          <div
+            class="bg-[radial-gradient(closest-side_at_50%_50%,_#00000062_0,#000000e2_100%)] bg-center absolute inset-0 opacity-40">
+          </div>
+          <!-- HERO CONTENT -->
+          <div class="container mx-auto z-10 relative px-4 h-full">
+            <div class="flex flex-col items-center justify-center py-5 h-full max-w-4xl mx-auto">
+              <!-- HERO HEADING -->
+              <h1
+                class="font-['Russo_One',_sans-serif] mb-3 uppercase text-center tracking-wide text-white text-[35px] leading-[42px] sm:text-[35px] sm:leading-[40px] md:text-[50px] md:leading-[65px] relative select-none cursor-text transition-all duration-500"
+                :class="heroLoaded ? 'opacity-100' : 'opacity-0'">
+                <template x-for="(hero, index) in heroData" :key="index">
+                  <span
+                    :class="selected === (index + 1) ? 'opacity-100 visible relative' : 'opacity-0 invisible absolute'"
+                    x-text="hero.title" class="top-0 left-0 w-full h-full transition-all duration-[800ms]"></span>
+                </template>
+              </h1>
+              <!-- HERO TEXT -->
+              <p class="text-white font-['Jost',_sans-serif] text-center mx-auto text-lg md:text-[20px] leading-snug relative block w-full select-none cursor-text transition-all duration-700 delay-200"
+                :class="heroLoaded ? 'opacity-100' : 'opacity-0'">
+                <template x-for="(hero, index) in heroData" :key="index">
+                  <span
+                    :class="selected === (index + 1) ? 'opacity-100 visible relative' : 'opacity-0 invisible absolute'"
+                    x-text="hero.caption" class="top-0 left-0 w-full h-full transition-all duration-[800ms]"></span>
+                </template>
+              </p>
+              <!-- HERO DETAIL -->
+              <div
+                class="border-t border-white border-solid sm:flex sm:flex-row justify-center items-center w-full max-w-lg mt-5 pt-5 text-center sm:text-left font-['Jost',_sans-serif] transition-all duration-1000 delay-500"
+                :class="heroLoaded ? 'opacity-100' : 'opacity-0'">
+                <!-- FEATURE TYPE -->
+                <div class="sm:w-4/12 mb-4 sm:mb-0">
+                  <p class="leading-4 text-white">
+                    <span
+                      class="text-[#f79400] uppercase font-medium tracking-wider leading-none block mb-1 text-base select-none cursor-text">Feature
+                      type</span>
+                    <a href="#" class="block text-white hover:text-orange text-lg relative">
+                      <template x-for="(hero, index) in heroData" :key="index">
+                        <span :class="selected === (index + 1) ? 'opacity-100 visible' : 'opacity-0 invisible'"
+                          x-text="hero.featureType"
+                          class="absolute first-of-type:relative top-0 left-0 w-full h-full transition-all duration-[800ms]"></span>
+                      </template>
+                    </a>
+                  </p>
+                </div>
+                <!-- AUTHOR TYPE -->
+                <div class="sm:w-4/12 mb-4 sm:mb-0">
+                  <p class="leading-4 text-white">
+                    <span
+                      class="text-[#f79400] uppercase font-medium tracking-wider text-base block mb-1 leading-none select-none cursor-text">Author</span>
+                    <template x-for="(hero, index) in heroData" :key="index">
+                      <a :href="hero.authorLink" x-show="selected === (index + 1)"
+                        class="block text-white hover:text-orange text-lg relative">
+                        <span
+                          :class="selected === (index + 1) ? 'opacity-100 visible relative' : 'opacity-0 invisible absolute'"
+                          x-text="hero.author"
+                          class="top-0 left-0 w-full h-full transition-all duration-[800ms]"></span>
+                      </a>
+                    </template>
+                  </p>
+                </div>
+                <!-- READ MORE -->
+                <div class="sm:w-4/12 mb-4 sm:mb-0 md:text-right">
+                  <template x-for="(hero, index) in heroData" :key="index">
+                    <a :href="hero.readMore" x-show="selected === (index + 1)"
+                      class="px-3 py-2 md:py-3 whitespace-nowrap rounded-md ease-[cubic-bezier(.4,0,.2,1)] transition-all uppercase text-[15px] bg-[#f79400] text-white inline-flex items-center font-['Jost',_sans-serif] tracking-wider hover:bg-[#cb7900]"
+                      draggable="false">
+                      Read more
+                      <span class="ml-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+                          <path fill-rule="evenodd"
+                            d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                            clip-rule="evenodd" />
+                        </svg>
+                      </span>
+                    </a>
+                  </template>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- HERO PAGINATION -->
+          <div
+            class="absolute z-20 text-center mt-5 w-full left-0 bottom-[32px] lg:bottom-[112px] flex gap-x-1.5 items-center justify-center">
+            <template x-for="(hero, index) in heroData" :key="index">
+              <span class="h-3 w-3 cursor-pointer rounded-full inline-block transition-all duration-[800ms]"
+                :id="index + 1" @click="selected = +$el.id" :class="selected === +$el.id ? 'bg-white' : 'bg-white/20'">
+              </span>
+            </template>
+          </div>
+        </div>
+      </div>
+    </template>
+  </section>
+  <!-- HERO SECTION END -->
+  <!-- HORIZONTAL NAVIGATION SECTION START -->
+  <!-- HORIZONTAL NAVIGATION OVERLAY-->
+  <div class="hidden lg:block sticky top-0 h-[90px] inset-x-0 -mt-[90px] bg-black/30 z-10"></div>
+  <!-- HORIZONTAL NAVIGATION -->
+  <section
+    class="top-0 w-2/4 xl:w-[45%] mx-auto inset-x-0 h-[90px] hidden lg:flex opacity-100 transition-opacity delay-700 duration-300 sticky -mt-[90px] z-20">
+    <ul
+      class="font-['Russo_One',_sans-serif] uppercase tracking-wide m-auto flex text-sm xl:text-base leading-none w-full gap-x-4 text-center">
+      <li class="mb-1">
+        <a href="#"
+          class="text-white tracking-wide transition-all ease-[cubic-bezier(.4,0,.2,1)] hover:text-[#f79400]">News</a>
+      </li>
+      <li class="mb-1">
+        <a href="#"
+          class="text-white tracking-wide transition-all ease-[cubic-bezier(.4,0,.2,1)] hover:text-[#f79400]">Features</a>
+      </li>
+      <li class="mb-1">
+        <a href="#"
+          class="text-white tracking-wide transition-all ease-[cubic-bezier(.4,0,.2,1)] hover:text-[#f79400]">Videos</a>
+      </li>
+      <li class="mb-1">
+        <a href="#"
+          class="text-white tracking-wide transition-all ease-[cubic-bezier(.4,0,.2,1)] hover:text-[#f79400]">Gear</a>
+      </li>
+      <li class="mb-1">
+        <a href="#"
+          class="text-white tracking-wide transition-all ease-[cubic-bezier(.4,0,.2,1)] hover:text-[#f79400]">The
+          collective</a>
+      </li>
+      <li class="mb-1">
+        <a href="#"
+          class="text-white tracking-wide transition-all ease-[cubic-bezier(.4,0,.2,1)] hover:text-[#f79400]">magazine</a>
+      </li>
+    </ul>
+  </section>
+  <!-- HORIZONTAL NAVIGATION END -->
+  <!-- NEWS SECTION START -->
+  <section class="py-10 md:py-16 bg-[url('../images/textured-bg.jpg')] bg-repeat relative z-0" x-data="{
+      newsCards: [
+        {
+          title: 'Jasmine Harrison becomes first woman to swim the length of Great Britain',
+          detail: 'The 23 year-old arrived in John O’Groats on Tuesday afternoon',
+          meta: 'BASE editorial team',
+          date: 'October 20, 2022',
+          url: '#',
+          imageSrc: 'images/card-1.webp',
+        },
+        {
+          title: 'Elnaz Rekabi returns to Iran amid fears for her safety',
+          detail: 'The professional climber may face persecution for defying Iranian hijab rules',
+          meta: 'Hannah Mitchell',
+          date: 'October 19, 2022',
+          url: '#',
+          imageSrc: 'images/card-2.webp',
+        },
+        {
+          title: 'Exclusive Discount for Adventure Uncovered',
+          detail: 'The inaugural film festival is coming to Bristol',
+          meta: 'BASE editorial team',
+          date: 'October 11, 2022',
+          url: '#',
+          imageSrc: 'images/card-3.webp',
+        },
+      ]
+    }">
+    <div class="container px-4 mx-auto">
+      <!-- SECTION HEADING BOX -->
+      <div class="mb-10 text-center">
+        <!-- SECTION CAPTION -->
+        <p class="mb-1 font-medium uppercase tracking-wide text-[#316094] text-lg md:text-xl font-['Jost',_sans-serif]">
+          What’s the latest in adventure?
+        </p>
+        <!-- SECTION HEADING -->
+        <h2 class="font-['Russo_One',_sans-serif] text-4xl md:text-5xl uppercase mb-4 text-[#111111]">
+          News
+        </h2>
+      </div>
+      <!-- NEWS CARDS CONTAINER -->
+      <div class="grid grid-cols-12 gap-5 lg:gap-10">
+        <!-- NEWS CARD -->
+        <template x-for="(card, index) in newsCards" :key="index">
+          <div class="col-span-12 md:col-span-4 font-['Jost',_sans-serif]">
+            <div class="block">
+              <!-- CARD IMAGE -->
+              <a :href="card.url" class="h-64 md:h-56 lg:h-72 block mb-5 overflow-hidden">
+                <img :src="card.imageSrc" :alt="card.title" :title="card.title"
+                  class="object-cover object-center h-full w-full transition-transform ease-[cubic-bezier(.4,0,.2,1)] duration-300 scale-100 hover:scale-105" />
+              </a>
+              <!-- CARD META -->
+              <p class="mb-1 uppercase font-medium tracking-wide text-sm text-[#766d66]">
+                <a class="text-grey" :href="card.url" x-text="card.meta"></a>
+                • <span x-text="card.date"></span>
+              </p>
+              <!-- CARD HEADING -->
+              <h4 class="uppercase tracking-wide text-xl font-bold mb-2">
+                <a :href="card.url" class="text-[#111111] hover:text-[#766d66]" x-text="card.title">
+                </a>
+              </h4>
+              <!-- CARD DETAIL -->
+              <p class="mb-5 leading-tight text-xl text-[#454545]" x-text="card.detail"></p>
+            </div>
+          </div>
+        </template>
+      </div>
+    </div>
+  </section>
+  <!-- NEWS SECTION END -->
+  <!-- STORIES AND FEATURES SECTION START -->
+  <section class="pt-10 pb-14 md:pt-16 md:pb-24 bg-[url('../images/textured-bg.jpg')] bg-repeat relative z-0">
+    <div class="container px-4 mx-auto">
+      <!-- SECTION HEADING BOX -->
+      <div class="mb-10">
+        <!-- SECTION CAPTION -->
+        <p class="mb-1 font-medium uppercase tracking-wide text-[#316094] text-lg md:text-xl font-['Jost',_sans-serif]">
+          Fuel your adventure imagination
+        </p>
+        <!-- SECTION HEADING -->
+        <div class="flex flex-col md:flex-row">
+          <h2 class="font-['Russo_One',_sans-serif] text-4xl md:text-5xl uppercase mb-4 text-[#111111]">
+            Stories and features that move and inspire
+          </h2>
+          <!-- VIEW MORE BUTTON -->
+          <a href="#"
+            class="text-white bg-[#316094] hover:bg-[#1e4571] py-3 px-4 text-base font-semibold mr-auto md:mr-0 md:justify-self-end md:ml-auto md:self-center font-['Jost',_sans-serif] uppercase transition-all duration-200 whitespace-nowrap rounded-md tracking-wide inline-flex items-center">
+            View more
+            <span class="ml-1.5">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
+                <path fill-rule="evenodd"
+                  d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                  clip-rule="evenodd" />
+              </svg>
+            </span>
+          </a>
+        </div>
+      </div>
+      <!-- STORIES AND FEATURES CONTENT -->
+      <!-- ROW -->
+      <div class="flex flex-col flex-wrap w-full md:h-[396px] lg:h-[532px] xl:h-[670px] md:mb-2">
+        <!-- SPAN ROW 2 -->
+        <a href="#"
+          class="relative group flex flex-grow-0 flex-shrink-0 overflow-hidden w-full md:w-6/12 mb-2 h-48 md:mb-0 md:h-full md:mr-2">
+          <!-- IMAGE -->
+          <div class="inset-0 absolute">
+            <img src="images/grid-1.webp" alt=""
+              class="object-cover object-center h-full w-full transition-transform duration-300 scale-100 group-hover:scale-105" />
+          </div>
+          <!-- OVERLAY -->
+          <div
+            class="absolute inset-0 z-[1] bg-[radial-gradient(circle,transparent_0,#000000bf_100%)] bg-center transition-opacity duration-300 opacity-100 group-hover:opacity-50">
+          </div>
+          <!-- TEXT BOX -->
+          <div class="absolute bottom-0 inset-x-0 p-4 sm:p-6 z-[2] font-['Jost',_sans-serif]">
+            <!-- HEADING -->
+            <h5 class="tracking-wide text-lg md:text-xl text-white uppercase mb-0 font-bold">
+              A Catalyst For Change: The Neil Gresham Interview
+            </h5>
+            <!-- DETAIL -->
+            <p class="m-0 text-white opacity-75 font-normal hidden sm:block">
+              We catch up with one of the UK’s most historically
+              significant and influential climbers
+            </p>
+          </div>
+        </a>
+        <!-- SPAN ROW 1 -->
+        <a href="#"
+          class="relative group flex flex-grow-0 flex-shrink-0 overflow-hidden w-full md:w-6/12 mb-2 h-48 md:h-[194px] lg:h-[262px] xl:h-[331px]">
+          <!-- IMAGE -->
+          <div class="inset-0 absolute">
+            <img src="images/grid-2.webp" alt=""
+              class="object-cover object-center h-full w-full transition-transform duration-300 scale-100 group-hover:scale-105" />
+          </div>
+          <!-- OVERLAY -->
+          <div
+            class="absolute inset-0 z-[1] bg-[radial-gradient(circle,transparent_0,#000000bf_100%)] bg-center transition-opacity duration-300 opacity-100 group-hover:opacity-50">
+          </div>
+          <!-- TEXT BOX -->
+          <div class="absolute bottom-0 inset-x-0 p-4 sm:p-6 z-[2] font-['Jost',_sans-serif]">
+            <!-- HEADING -->
+            <h5 class="tracking-wide text-lg md:text-xl text-white uppercase mb-0 font-bold">
+              The Ultimate Guide To Via Ferrata in the UK
+            </h5>
+            <!-- DETAIL -->
+            <p class="m-0 text-white opacity-75 font-normal hidden sm:block">
+              Everything you need to know including where to go and
+              what to expect from a day on one of the UK’s
+              high-octane, high-wire adventures
+            </p>
+          </div>
+        </a>
+        <!-- SPAN ROW 1 -->
+        <a href="#"
+          class="relative group flex flex-grow-0 flex-shrink-0 overflow-hidden w-full md:w-6/12 mb-2 h-48 md:mb-0 md:h-[194px] lg:h-[262px] xl:h-[331px]">
+          <!-- IMAGE -->
+          <div class="inset-0 absolute">
+            <img src="images/grid-3.webp" alt=""
+              class="object-cover object-center h-full w-full transition-transform duration-300 scale-100 group-hover:scale-105" />
+          </div>
+          <!-- OVERLAY -->
+          <div
+            class="absolute inset-0 z-[1] bg-[radial-gradient(circle,transparent_0,#000000bf_100%)] bg-center transition-opacity duration-300 opacity-100 group-hover:opacity-50">
+          </div>
+          <!-- TEXT BOX -->
+          <div class="absolute bottom-0 inset-x-0 p-4 sm:p-6 z-[2] font-['Jost',_sans-serif]">
+            <!-- HEADING -->
+            <h5 class="tracking-wide text-lg md:text-xl text-white uppercase mb-0 font-bold">
+              Take a flight with the world’s most daring Wingsuit
+              Pilots
+            </h5>
+            <!-- DETAIL -->
+            <p class="m-0 text-white opacity-75 font-normal hidden sm:block">
+              This could be the best wingsuit film ever
+            </p>
+          </div>
+        </a>
+      </div>
+      <!-- ROW -->
+      <div class="flex flex-col flex-wrap w-full md:h-[396px] lg:h-[532px] xl:h-[670px] md:mb-2">
+        <!-- SPAN ROW 1 -->
+        <a href="#"
+          class="relative group flex flex-grow-0 flex-shrink-0 overflow-hidden w-full md:w-6/12 mb-2 h-48 md:h-[194px] lg:h-[262px] xl:h-[331px]">
+          <!-- IMAGE -->
+          <div class="inset-0 absolute">
+            <img src="images/grid-5.webp" alt=""
+              class="object-cover object-center h-full w-full transition-transform duration-300 scale-100 group-hover:scale-105" />
+          </div>
+          <!-- OVERLAY -->
+          <div
+            class="absolute inset-0 z-[1] bg-[radial-gradient(circle,transparent_0,#000000bf_100%)] bg-center transition-opacity duration-300 opacity-100 group-hover:opacity-50">
+          </div>
+          <!-- TEXT BOX -->
+          <div class="absolute bottom-0 inset-x-0 p-4 sm:p-6 z-[2] font-['Jost',_sans-serif]">
+            <!-- HEADING -->
+            <h5 class="tracking-wide text-lg md:text-xl text-white uppercase mb-0 font-bold">
+              The Mine Line
+            </h5>
+            <!-- DETAIL -->
+            <p class="m-0 text-white opacity-75 font-normal hidden sm:block">
+              Freeride bike lines in an abandoned coal mine
+            </p>
+          </div>
+        </a>
+        <!-- SPAN ROW 1 -->
+        <a href="#"
+          class="relative group flex flex-grow-0 flex-shrink-0 overflow-hidden w-full md:w-6/12 mb-2 h-48 md:mb-0 md:h-[194px] lg:h-[262px] xl:h-[331px]">
+          <!-- IMAGE -->
+          <div class="inset-0 absolute">
+            <img src="images/grid-6.webp" alt=""
+              class="object-cover object-center h-full w-full transition-transform duration-300 scale-100 group-hover:scale-105" />
+          </div>
+          <!-- OVERLAY -->
+          <div
+            class="absolute inset-0 z-[1] bg-[radial-gradient(circle,transparent_0,#000000bf_100%)] bg-center transition-opacity duration-300 opacity-100 group-hover:opacity-50">
+          </div>
+          <!-- TEXT BOX -->
+          <div class="absolute bottom-0 inset-x-0 p-4 sm:p-6 z-[2] font-['Jost',_sans-serif]">
+            <!-- HEADING -->
+            <h5 class="tracking-wide text-lg md:text-xl text-white uppercase mb-0 font-bold">
+              Meet the Woman Putting More Mums on Mountains
+            </h5>
+            <!-- DETAIL -->
+            <p class="m-0 text-white opacity-75 font-normal hidden sm:block">
+              Carla Imbrenda is on a mission empowering women in the
+              outdoors
+            </p>
+          </div>
+        </a>
+        <!-- SPAN ROW 2 -->
+        <a href="#"
+          class="relative group flex flex-grow-0 flex-shrink-0 overflow-hidden w-full md:w-6/12 mb-2 h-48 md:mb-0 md:h-full md:ml-2">
+          <!-- IMAGE -->
+          <div class="inset-0 absolute">
+            <img src="images//hero-img-1.jpg" alt=""
+              class="object-cover object-center h-full w-full transition-transform duration-300 scale-100 group-hover:scale-105" />
+          </div>
+          <!-- OVERLAY -->
+          <div
+            class="absolute inset-0 z-[1] bg-[radial-gradient(circle,transparent_0,#000000bf_100%)] bg-center transition-opacity duration-300 opacity-100 group-hover:opacity-50">
+          </div>
+          <!-- TEXT BOX -->
+          <div class="absolute bottom-0 inset-x-0 p-4 sm:p-6 z-[2] font-['Jost',_sans-serif]">
+            <!-- HEADING -->
+            <h5 class="tracking-wide text-lg md:text-xl text-white uppercase mb-0 font-bold">
+              Free Rein: An Introduction to Pony Trekking
+            </h5>
+            <!-- DETAIL -->
+            <p class="m-0 text-white opacity-75 font-normal hidden sm:block">
+              Walking the length of the Scottish Highlands with a
+              fell pony
+            </p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+  <!-- STORIES AND FEATURES SECTION END -->
+  <!-- GEAR REVIEWS SECTION START -->
+  <section class="pb-10 md:pb-16 bg-[url('../images/textured-bg.jpg')] bg-repeat" x-data="{
+      reviews: [
+        {
+          title: 'Review: Danner Women’s Trail 2650',
+          detail: 'The lightweight breathable trail shoe',
+          author: 'Emily Graham',
+          date: 'October 20, 2022',
+          star: 5,
+          url: '#',
+          imageSrc: 'images/review-1.jpg',
+        },
+        {
+          title: 'Review: Garmin Instinct 2S Solar',
+          detail: 'Exceptional battery life and extensive activity tracking and metrics – the Instinct 2S Solar has a lot to offer in a neat, nifty little package.',
+          author: 'Hannah Mitchell',
+          date: 'October 19, 2022',
+          star: 4.5,
+          url: '#',
+          imageSrc: 'images/review-2.jpg',
+        },
+        {
+          title: 'Review: ADIDAS TERREX Multi RAIN.RDY Jacket',
+          detail: 'The straight forward waterproof and windproof shell',
+          author: 'Matthew Pink',
+          date: 'October 11, 2022',
+          star: 3,
+          url: '#',
+          imageSrc: 'images/review-3.jpg',
+        },
+      ]
+    }">
+    <div class="container mx-auto px-4">
+      <!-- SECTION HEADING BOX -->
+      <div class="mb-10 text-center">
+        <!-- SECTION CAPTION -->
+        <p class="mb-1 font-medium uppercase tracking-wide text-[#316094] text-lg md:text-xl font-['Jost',_sans-serif]">
+          Tried. Tested. Assessed.
+        </p>
+        <!-- SECTION HEADING -->
+        <h2 class="font-['Russo_One',_sans-serif] text-4xl md:text-5xl uppercase mb-4 text-[#111111]">
+          Gear reviews and spotlights
+        </h2>
+      </div>
+      <!-- REVIEWS CARDS CONTAINER -->
+      <div class="grid grid-cols-12 gap-5 lg:gap-10">
+        <!-- REVIEW CARD -->
+        <template x-for="(review, index) in reviews" :key="index">
+          <div class="col-span-12 md:col-span-4 font-['Jost',_sans-serif]">
+            <div class="block">
+              <!-- REVIEW IMAGE -->
+              <a :href="review.url" class="h-64 md:h-56 lg:h-72 block mb-5 overflow-hidden">
+                <img :src="review.imageSrc" :alt="review.title" :title="review.title"
+                  class="object-cover object-center h-full w-full transition-transform ease-[cubic-bezier(.4,0,.2,1)] duration-300 scale-100 hover:scale-105" />
+              </a>
+              <!-- REVIEW META -->
+              <p class="mb-1 uppercase font-medium tracking-wide text-sm text-[#316094]">
+                <a class="text-grey uppercase" :href="review.url">Review</a>
+                •
+                <a class="text-grey uppercase" :href="review.url" x-text="review.author"></a>
+                • <span x-text="review.date"></span>
+              </p>
+              <!-- REVIEW HEADING -->
+              <h4 class="uppercase tracking-wide text-xl font-bold mb-2">
+                <a :href="review.url" class="text-[#111111] hover:text-[#766d66]" x-text="review.title">
+                </a>
+              </h4>
+              <!-- REVIEW STARS -->
+              <div class="mb-2 text-xl cursor-default inline-block font-bold bg-clip-text text-transparent" :class="{
+                  'bg-[linear-gradient(90deg,#fc0_20%,#dedede_0)]' : review.star === 1,
+                  'bg-[linear-gradient(90deg,#fc0_30%,#dedede_0)]' : review.star === 1.5,
+                  'bg-[linear-gradient(90deg,#fc0_40%,#dedede_0)]' : review.star === 2,
+                  'bg-[linear-gradient(90deg,#fc0_50%,#dedede_0)]' : review.star === 2.5,
+                  'bg-[linear-gradient(90deg,#fc0_60%,#dedede_0)]' : review.star === 3,
+                  'bg-[linear-gradient(90deg,#fc0_70%,#dedede_0)]' : review.star === 3.5,
+                  'bg-[linear-gradient(90deg,#fc0_80%,#dedede_0)]' : review.star === 4,
+                  'bg-[linear-gradient(90deg,#fc0_90%,#dedede_0)]' : review.star === 4.5,
+                  'bg-[linear-gradient(90deg,#fc0_100%,#dedede_0)]' : review.star === 5,
+                  }">
+                ★★★★★
+              </div>
+              <!-- REVIEW DETAIL -->
+              <p class="mb-5 leading-tight text-xl text-[#454545]" x-text="review.detail"></p>
+            </div>
+          </div>
+        </template>
+      </div>
+    </div>
+  </section>
+  <!-- GEAR REVIEWS SECTION END -->
+  <!-- COLLECTIVE SECTION START -->
+  <section class="bg-[url('../images/textured-bg-grey.jpg')] bg-repeat py-20 md:py-24 relative overflow-x-hidden"
+    x-data="{
+      shown: false,
+    }" x-intersect.threshold.30="shown = true" x-intersect:leave.threshold.30="shown = false">
+    <img src="images/splash-white-left-top.svg" alt="" class="absolute left-0 top-0 w-3/4 lg:hidden" />
+    <img src="images/splash-white-left.svg" alt="" class="absolute left-0 bottom-0 w-2/4 hidden lg:block" />
+    <div class="container mx-auto px-4 relative z-[1]">
+      <!-- COLLECTIVE CONTAINER -->
+      <div class="grid lg:grid-cols-12 gap-5 items-center">
+        <!-- COLLECTIVE LEFT SIDE -->
+        <div class="lg:col-span-6 xl:col-span-5 mb-20 lg:mb-0 relative">
+          <div class="max-w-xl mx-auto lg:mx-0">
+            <div class="relative sm:ml-12">
+              <!-- COLLECTIVE CARD -->
+              <a href="#"
+                class="block relative h-[500px] lg:h-[550px] z-[3] after:block after:bg-[#316094] after:inset-0 after:absolute after:transition-opacity after:duration-300 after:opacity-0 hover:after:opacity-50">
+                <img src="images/collective.webp" alt="" class="object-cover object-center h-full w-full" />
+                <!-- IMAGE CAPTION -->
+                <div
+                  class="absolute inset-x-0 bottom-0 p-6 md:p-8 lg:pl-16 lg:pb-10 before:absolute before:inset-0 before:bg-[linear-gradient(180deg,transparent,#000000e6)]">
+                  <h3 class="text-white font-['Russo_One',_sans-serif] text-3xl mb-2 relative z-[1] uppercase">
+                    Sal Montgomery
+                  </h3>
+                  <p class="text-white text-sm relative z-[1] m-0">
+                    Expedition kayaker and adventure author Sal, can
+                    usually be found in deep, committing canyons,
+                    exploring unknown whitewater and dropping off
+                    tall waterfalls. Sal’s led multiple
+                    first-descents all over the world, often in some
+                    pretty weird and wonderful places!
+                  </p>
+                </div>
+              </a>
+              <div class="block absolute inset-0 transform transition-transform duration-700 z-[2]"
+                :class="{'rotate-[10deg]' : shown}">
+                <img src="images/collective-2.webp" alt="" class="object-cover object-center h-full w-full" />
+                <div class="absolute bg-black opacity-75 inset-0"></div>
+              </div>
+              <div class="block absolute inset-0 transform transition-transform duration-700 z-[1]"
+                :class="{'rotate-[20deg]' : shown}">
+                <img src="images/collective-3.webp" alt="" class="object-cover object-center h-full w-full" />
+                <div class="absolute bg-black opacity-75 inset-0"></div>
+              </div>
+              <img src="images/splash-white-left.svg" alt=""
+                class="absolute -left-[120px] z-[3] bottom-0 w-[210px] hidden lg:block" />
+            </div>
+          </div>
+        </div>
+        <!-- COLLECTIVE RIGHT SIDE -->
+        <div class="lg:col-span-6 xl:col-span-7" x-data="{textShown : false}"
+          x-intersect.threshold.30="textShown = true" x-intersect:leave.threshold.30="textShown = false">
+          <div class="lg:pl-24 xl:pl-28">
+            <p class="mb-1 font-medium uppercase tracking-wide text-[#f79400] font-['Jost',_sans-serif] md:text-lg transition-all duration-1000"
+              x-data="{textShown : false}" x-intersect:leave="textShown = false" x-intersect.full=" textShown=true"
+              :class="{'opacity-0' : !textShown}">
+              Our unique network of adventure trailblazers
+            </p>
+            <h2
+              class="text-[30px] md:text-[50px] font-['Russo_One',_sans-serif] mb-4 md:md-0 text-white uppercase transition-all duration-1000"
+              x-data="{textShown : false}" x-intersect:leave="textShown = false" x-intersect.full=" textShown=true"
+              :class="{'opacity-0' : !textShown}">
+              The BASE Collective
+            </h2>
+            <div class="text-white font-['Jost',_sans-serif] md:text-lg transition-all duration-1000"
+              x-data="{textShown : false}" x-intersect:leave="textShown = false" x-intersect.full=" textShown=true"
+              :class="{'opacity-0' : !textShown}">
+              <p class="mb-5">
+                Elite, emerging or somewhere in-between, the BASE
+                Collective are our unique community of adventure
+                creatives covering an ever-evolving range of
+                specialisms.
+              </p>
+              <p class="mb-5">
+                Roaming all corners of the globe, they share their
+                incredible tales, experiences and guidance through
+                BASE to inspire us all to live more adventurously.
+              </p>
+            </div>
+            <div class="mt-7 transition-all duration-1000" x-data="{textShown : false}"
+              x-intersect:leave="textShown = false" x-intersect.full=" textShown=true"
+              :class="{'opacity-0' : !textShown}">
+              <a href="#"
+                class="px-3 py-2 md:py-3 whitespace-nowrap rounded-md ease-[cubic-bezier(.4,0,.2,1)] transition-all uppercase text-[15px] bg-[#f79400] text-white inline-flex items-center font-['Jost',_sans-serif] tracking-wider hover:bg-[#cb7900] font-semibold"
+                draggable="false">
+                Find out more
+                <span class="ml-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+                    <path fill-rule="evenodd"
+                      d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                      clip-rule="evenodd" />
+                  </svg>
+                </span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- COLLECTIVE SECTION END -->
+  <!-- EXPLORE SECTION START -->
+  <section class="bg-[url('../images/textured-bg.jpg')] bg-repeat py-14 md:py-24 relative" x-data="{
+      exploreCards: [
+        {
+          title: 'The Man Cycling 1 Million Vertical Metres in a Year',
+          type: 'Interview',
+          author: 'Chris Hunt',
+          date: 'Oct 21, 2022',
+          detail: 'Jack Thompson’s latest challenge will see him ride the height of Everest 113 times this year, all in the name of mental health awareness',
+          imageSrc: 'images/explore-1.jpg',
+          url: '#'
+        },
+        {
+          title: 'Dawn Patrol',
+          type: 'Video',
+          author: 'BASE editorial team',
+          date: 'Oct 20, 2022',
+          detail: 'The reason we rise',
+          imageSrc: 'images/explore-2.jpg',
+          url: '#'
+        },
+        {
+          title: 'Double or Nothing: The UK’s First Tandem BASE Jump',
+          type: 'Story',
+          author: 'Dave Gallagher',
+          date: 'Oct 19, 2022',
+          detail: 'Making history back at the location of the first UK cliff BASE jump 40 years ago',
+          imageSrc: 'images/explore-3.jpg',
+          url: '#'
+        },
+        {
+          title: 'Take a flight with the world’s most daring Wingsuit Pilots',
+          type: 'Video',
+          author: 'BASE editorial team',
+          date: 'Oct 17, 2022',
+          detail: 'This could be the best wingsuit film ever',
+          imageSrc: 'images/explore-4.jpg',
+          url: '#'
+        },
+        {
+          title: 'The Ultimate Guide To Via Ferrata in the UK',
+          type: 'spotlight',
+          author: 'BASE editorial team',
+          date: 'Oct 14, 2022',
+          detail: 'Everything you need to know including where to go and what to expect from a day on one of the UK’s high-octane, high-wire adventures',
+          imageSrc: 'images/grid-2.webp',
+          url: '#'
+        },
+      ]
+    }">
+    <div class="container mx-auto px-4">
+      <!-- SECTION HEADING BOX -->
+      <div class="mb-10">
+        <!-- SECTION CAPTION -->
+        <p class="mb-1 font-medium uppercase tracking-wide text-[#316094] text-lg md:text-xl font-['Jost',_sans-serif]">
+          Explore
+        </p>
+        <!-- SECTION HEADING -->
+        <div class="flex flex-col md:flex-row">
+          <h2 class="font-['Russo_One',_sans-serif] text-4xl md:text-5xl uppercase mb-4 text-[#111111]">
+            Our most read and most loved recent stories
+          </h2>
+          <!-- VIEW MORE BUTTON -->
+          <a href="#"
+            class="text-white bg-[#316094] hover:bg-[#1e4571] py-3 px-4 text-base font-semibold mr-auto md:mr-0 md:justify-self-end md:ml-auto md:self-center font-['Jost',_sans-serif] uppercase transition-all duration-200 whitespace-nowrap rounded-md tracking-wide inline-flex items-center">
+            View more
+            <span class="ml-1.5">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
+                <path fill-rule="evenodd"
+                  d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                  clip-rule="evenodd"></path>
+              </svg>
+            </span>
+          </a>
+        </div>
+      </div>
+      <!-- SECTION CONTENT CONTAINER -->
+      <div class="grid lg:grid-cols-2 gap-5">
+        <!-- CARD PRIMARY -->
+        <div class="flex flex-col md:flex-row md:items-center mb-3 font-['Jost',_sans-serif]">
+          <div class="md:pl-5">
+            <p
+              class="mb-1 font-medium uppercase tracking-wide text-[#316094] text-xs md:text-sm font-['Jost',_sans-serif]">
+              <a href="#">Video</a>
+              •
+              <a href="#">BASE editorial team</a>
+              •
+              Oct 21, 2022
+            </p>
+            <h4 class="uppercase tracking-wide text-xl font-bold mb-2">
+              <a href="#" class="text-[#111111] hover:text-[#766d66]">Skateboarding For All</a>
+            </h4>
+            <p class="font-['Jost',_sans-serif] text-xs md:text-lg">
+              A Land For Everyone celebrates a shared loved of the outdoors, adventure and skateboarding
+            </p>
+          </div>
+        </div>
+        <!-- CARD -->
+        <template x-for="(card, index) in exploreCards" :key="index">
+          <div class="flex flex-col md:flex-row md:items-center mb-3 font-['Jost',_sans-serif]">
+            <!-- CARD IMAGE -->
+            <a :href="card.url" class="h-44 md:w-[210px] md:h-[150px] shrink-0 block mb-3 md:mb-0">
+              <img :src="card.imageSrc" :alt="card.title" :title="card.title"
+                class="object-cover object-left md:object-center h-full w-full">
+            </a>
+            <div class="md:pl-5">
+              <p
+                class="mb-1 font-medium uppercase tracking-wide text-[#316094] text-xs md:text-sm font-['Jost',_sans-serif]">
+                <a :href="card.url" x-text="card.type"></a>
+                •
+                <a :href="card.url" x-text="card.author"></a>
+                •
+                <span x-text="card.date"></span>
+              </p>
+              <h4 class="uppercase tracking-wide leading-tight text-xl font-bold mb-2">
+                <a href="#" class="text-[#111111] hover:text-[#766d66]" x-text="card.title">
+                </a>
+              </h4>
+              <p class="font-['Jost',_sans-serif] text-xs md:text-lg" x-text="card.detail">
+              </p>
+            </div>
+          </div>
+        </template>
+      </div>
+    </div>
+  </section>
+  <!-- EXPLORE SECTION END -->
+  <!-- FOOTER START -->
+  <footer class="bg-[url('../images/textured-bg-black.jpg')] bg-repeat pt-20 pb-5">
+    <!-- FOOTER PRIMARY -->
+    <div class="container mx-auto px-4 grid grid-cols-12 gap-5">
+      <!-- PRIMARY 1ST COL -->
+      <div class="col-span-12 md:col-span-12 lg:col-span-6 mb-5 lg:mb-0">
+        <div class="max-w-md">
+          <h5 class="text-[22px] md:text-[25px] font-['Russo_One',_sans-serif] mb-4 md:md-0 text-white uppercase">
+            DON’T MISS A SINGLE ADVENTURE
+          </h5>
+          <p class="text-white/75 font-['Jost',_sans-serif] md:text-lg mb-4">
+            Sign up <span class="font-bold">for free</span> today to get our weekly BASE newsletter. Made by adventurers
+            for adventurers. We distil the best
+            stories, reviews and news to whet your adventure appetite.
+          </p>
+          <form class="w-full relative">
+            <!-- EMAIL INPUT -->
+            <input type="search"
+              class="w-full appearance-none bg-white border outline-none border-[#d3d3d3] focus:border-[#f79400] focus:ring-0 py-2.5 px-3 text-[19px] leading-[24px] rounded-lg font-['Jost',_sans-serif]"
+              placeholder="Email Address" value="" name="e">
+            <!-- EMAIL SUBMIT BUTTON -->
+            <button type="button"
+              class="md:absolute mt-1.5 md:mt-0 w-full md:w-auto right-0 top-0 bottom-0 bg-[#f79400] rounded-md md:rounded-r-md md:rounded-l-none transition-colors hover:bg-[#cb7900] text-white flex items-center justify-center py-2.5 px-3 uppercase font-semibold">
+              Subscribe
+              <span class="ml-1">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+                  <path fill-rule="evenodd"
+                    d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                    clip-rule="evenodd" />
+                </svg>
+              </span>
+            </button>
+          </form>
+        </div>
+      </div>
+      <!-- PRIMARY 2ND COL -->
+      <div class="col-span-6 md:col-span-4 lg:col-span-2">
+        <ul
+          class="flex flex-col justify-between w-full text-base mb-1 font-medium uppercase tracking-wide font-['Jost',_sans-serif] text-white">
+          <li class="mb-0.5">
+            <a href="#" class="mb-2 block transition-all duration-300 hover:text-[#f79400]">Features</a>
+          </li>
+          <li class="mb-0.5">
+            <a href="#" class="mb-2 block transition-all duration-300 hover:text-[#f79400]">Videos</a>
+          </li>
+          <li class="mb-0.5">
+            <a href="#" class="mb-2 block transition-all duration-300 hover:text-[#f79400]">Gear</a>
+          </li>
+          <li class="mb-0.5">
+            <a href="#" class="mb-2 block transition-all duration-300 hover:text-[#f79400]">The Collective</a>
+          </li>
+          <li class="mb-0.5">
+            <a href="#" class="mb-2 block transition-all duration-300 hover:text-[#f79400]">magazine</a>
+          </li>
+        </ul>
+      </div>
+      <!-- PRIMARY 3RD COL -->
+      <div class="col-span-6 md:col-span-4 lg:col-span-2">
+        <ul
+          class="flex flex-col justify-between w-full text-base mb-1 font-medium uppercase tracking-wide font-['Jost',_sans-serif] text-white">
+          <li class="mb-0.5">
+            <a href="#" class="mb-2 block transition-all duration-300 hover:text-[#f79400]">Contribute</a>
+          </li>
+          <li class="mb-0.5">
+            <a href="#" class="mb-2 block transition-all duration-300 hover:text-[#f79400]">Join us</a>
+          </li>
+          <li class="mb-0.5">
+            <a href="#" class="mb-2 block transition-all duration-300 hover:text-[#f79400]">Get in touch</a>
+          </li>
+          <li class="mb-0.5">
+            <a href="#" class="mb-2 block transition-all duration-300 hover:text-[#f79400]">The BASE Story</a>
+          </li>
+          <li class="mb-0.5">
+            <a href="#" class="mb-2 block transition-all duration-300 hover:text-[#f79400]">For advertisers &
+              partners</a>
+          </li>
+        </ul>
+      </div>
+      <!-- PRIMARY 4TH COL -->
+      <div class="col-span-12 md:col-span-4 lg:col-span-2">
+        <ul class="flex flex-row">
+          <li class="mr-3 mb-1">
+            <a href="#" class="block opacity-100 transition-opacity hover:opacity-75">
+              <img src="images/instagram.svg" alt="" class="h-6 w-auto">
+            </a>
+          </li>
+          <li class="mr-3 mb-1">
+            <a href="#" class="block opacity-100 transition-opacity hover:opacity-75">
+              <img src="images/youtube.svg" alt="" class="h-6 w-auto">
+            </a>
+          </li>
+          <li class="mr-3 mb-1">
+            <a href="#" class="block opacity-100 transition-opacity hover:opacity-75">
+              <img src="images/linkedin.svg" alt="" class="h-6 w-auto">
+            </a>
+          </li>
+          <li class="mr-3 mb-1">
+            <a href="#" class="block opacity-100 transition-opacity hover:opacity-75">
+              <img src="images/facebook.svg" alt="" class="h-6 w-auto">
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <!-- FOOTER SECONDARY -->
+    <div class="container mx-auto px-4 mt-10 md:mt-20 font-['Jost',_sans-serif]">
+      <div class="sm:flex sm:flex-row">
+        <p class="text-sm mb-0 text-white opacity-75">
+          © 2022 BASE Adventure Media Ltd
+          <span class="hidden sm:inline-block">•</span>
+        </p>
+        <ul class="flex flex-row flex-wrap sm:justify-between text-sm mb-0 text-white opacity-75 p-0">
+          <li class="mx-2">
+            <a href="#">
+              Privacy Policy
+            </a>
+          </li>
+          <li class="mx-2">
+            <a href="#">
+              Cookie Notice
+            </a>
+          </li>
+          <li class="mx-2">
+            <a href="#">
+              Website by Yellow Peach
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+  <!-- FOOTER END -->
+</body>
+
+</html>
